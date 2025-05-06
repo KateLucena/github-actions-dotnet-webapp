@@ -1,0 +1,41 @@
+name: Build and Test .NET App
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *' # Executa a cada hora
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Configurar .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0' # Altere para a versão necessária
+
+      # Restaurar dependências
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Compilar o projeto
+      - name: Build project
+        run: dotnet build --no-restore --configuration Release
+
+      # Executar testes
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal
+
+      # Script personalizado
+      - name: Custom script
+        run: |
+          echo "Executando script personalizado..."
+          echo "Data e hora: $(date)"
